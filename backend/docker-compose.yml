@@ -1,0 +1,17 @@
+services:
+  flask:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      FLASK_ENV: production
+    command: gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+  youtube-session-generator:
+    image: quay.io/invidious/youtube-trusted-session-generator
+    container_name: youtube-trusted-session-generator
+    ports:
+      - "8080:8080"
