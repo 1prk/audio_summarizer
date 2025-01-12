@@ -1,12 +1,9 @@
 from flask import Blueprint, request, jsonify
-from faster_whisper import WhisperModel
-import yt_dlp
-from dotenv import load_dotenv
-import os
+import redis
+import uuid
 
-load_dotenv()
+redis_client = redis.Redis(host='redis', port=6379, decode_responses=True)
 api = Blueprint('api', __name__)
-whisper_model = WhisperModel("tiny")
 
 @api.route('/api/ping', methods=['GET'])
 def ping():
@@ -15,37 +12,20 @@ def ping():
 @api.route('/api/get_audio', methods=['GET'])
 def handle_data():
     url = request.args.get('url', 'No message provided')
-    model = whisper_model
+    task_id = str(uuid.uuid4())
 
-    ##TODO: wrapper für po-token und cookie jar
-    ydl_opts = {
-        'cookiefile': 'cookies.txt',
-        'po-token': os.getenv('PO_TOKEN'),
-        'extract_audio': True,
-        'format': 'bestaudio',
-        'outtmpl': os.path.join('data/', '%(id)s.mp3')
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        video_title = info['id']
-        ydl.download(url)
-        segments, info = model.transcribe(f'./data/{video_title}.mp3')
+    redis_client.lpush('tasks', f"{task_id}|{url}")
+    return jsonify({'task_id': task_id}), 200
 
-        segment_list = []
-        for segment in segments:
-            segment_list.append({
-                "start": segment.start,
-                "end": segment.end,
-                "text": segment.text
-            })
-            print(segment)
+@api.route('/api/result/<task_id>', methods=['GET'])
+def get_result(task_id):
+    result = redis_client.get(f"result:{task_id}")
+    if result:
+        return jsonify(result), 200
 
-        response = {
-            "video_info": {
-                "title": video_title,
-                "url": url
-            },
-            "transcription": segment_list,
-        }
+    error = redis_client.get(f"result:{task_id}:error")
+    if error:
+        return jsonify({'error': error}), 500
 
-        return jsonify(response)
+    return jsonify({'status': 'processing'}), 202
+
