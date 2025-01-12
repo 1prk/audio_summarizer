@@ -1,0 +1,44 @@
+services:
+secrets:
+  openai_api_key:
+    file: ./secrets.txt
+  flask:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      FLASK_ENV: development
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+    command: ["python", "app.py"]
+
+  worker:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - redis
+    command: ["python", "workers/worker.py"]
+    secrets:
+      -openai_api_key
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/root/redis
+      - ./data/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
