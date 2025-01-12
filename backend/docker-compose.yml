@@ -1,7 +1,8 @@
-services:
 secrets:
   openai_api_key:
-    file: ./secrets.txt
+    file: secrets.txt
+
+services:
   flask:
     build:
       context: .
@@ -29,7 +30,7 @@ secrets:
       - redis
     command: ["python", "workers/worker.py"]
     secrets:
-      -openai_api_key
+      - openai_api_key
 
   redis:
     image: redis:latest
