@@ -22,7 +22,7 @@ class Worker:
         )
         self.whisper_model = WhisperModel("tiny")
         self.client = OpenAI()
-        with open("/prompts/standard.json", "r") as prompts_file:
+        with open("workers/prompts/standard.json", "r") as prompts_file:
             self.prompt = json.load(prompts_file)
 
     def summary(self, content):
