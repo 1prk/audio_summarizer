@@ -15,17 +15,43 @@ def handle_data():
     task_id = str(uuid.uuid4())
 
     redis_client.lpush('tasks', f"{task_id}|{url}")
+    task_key = f"result:{task_id}"
+    redis_client.hset(task_key, mapping={
+        "status": "processing"
+    })
+
     return jsonify({'task_id': task_id}), 200
 
 @api.route('/api/result/<task_id>', methods=['GET'])
 def get_result(task_id):
-    result = redis_client.get(f"result:{task_id}")
-    if result:
-        return jsonify(result), 200
+    try:
+        # Redis-Schlüssel
+        task_key = f"result:{task_id}"
 
-    error = redis_client.get(f"result:{task_id}:error")
-    if error:
-        return jsonify({'error': error}), 500
+        # Ergebnis und Status aus Redis abrufen
+        result = redis_client.hget(task_key, "result")
+        status = redis_client.hget(task_key, "status")
 
-    return jsonify({'status': 'processing'}), 202
+        if status == "done" and result:
+            return jsonify({
+                "status": status,
+                "result": result
+            }), 200
 
+        # Falls Status noch "processing" ist
+        if status == "processing":
+            return jsonify({"status": "processing"}), 202
+
+        # Falls kein Ergebnis gefunden wurde, prüfe auf Fehler
+        error = redis_client.hget(task_key, "error")
+        if error:
+            return jsonify({
+                "status": "failed",
+                "error": error
+            }), 500
+
+        # Falls kein Status oder Ergebnis existiert
+        return jsonify({"status": "unknown"}), 404
+
+    except redis.exceptions.RedisError as e:
+        return jsonify({"error": f"Redis error: {str(e)}"}), 500

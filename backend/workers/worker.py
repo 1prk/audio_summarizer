@@ -20,7 +20,7 @@ class Worker:
             port=6379,  # Standardport für Redis
             decode_responses=True
         )
-        self.whisper_model = WhisperModel("tiny")
+        self.whisper_model = WhisperModel("base")
         self.client = OpenAI()
         with open("workers/prompts/standard.json", "r") as prompts_file:
             self.prompt = json.load(prompts_file)
@@ -80,8 +80,14 @@ class Worker:
                 audio_summary = self.summary(json.dumps(response))
                 print(audio_summary)
 
-                self.redis_client.setex(f"result:{task_id}", 3600, audio_summary)
                 print(f"Task {task_id} completed successfully!")
+                task_key = f"result:{task_id}"
+                self.redis_client.hset(task_key, mapping={
+                    "status": "done",
+                    "result": audio_summary
+                })
+                self.redis_client.expire(task_key, 3600)
+
 
 if __name__ == "__main__":
     worker = Worker()
