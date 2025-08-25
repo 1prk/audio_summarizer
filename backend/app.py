@@ -1,4 +1,12 @@
+
 from app import create_app, socketio
+import redis
+
+redis_client = redis.StrictRedis(
+    host="redis",  # Hostname entspricht dem Servicenamen in docker-compose.yml
+    port=6379,     # Standardport für Redis
+    decode_responses=True
+)
 
 app = create_app()
 
