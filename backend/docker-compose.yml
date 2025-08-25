@@ -1,17 +1,85 @@
+version: '3.8'
+
 services:
+  postgres:
+    image: postgres:15
+    container_name: audio_summarizer_postgres
+    environment:
+      POSTGRES_DB: audio_summarizer
+      POSTGRES_USER: audio_user
+      POSTGRES_PASSWORD: audio_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U audio_user -d audio_summarizer"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: audio_summarizer_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   flask:
     build:
       context: .
+    container_name: audio_summarizer_flask
     ports:
       - "5000:5000"
     volumes:
       - .:/app
+      - audio_data:/app/data
     environment:
       FLASK_ENV: production
+      DATABASE_URL: postgresql://audio_user:audio_password@postgres:5432/audio_summarizer
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     command: gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+  celery-worker:
+    build:
+      context: .
+    container_name: audio_summarizer_celery
+    volumes:
+      - .:/app
+      - audio_data:/app/data
+    environment:
+      DATABASE_URL: postgresql://audio_user:audio_password@postgres:5432/audio_summarizer
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: celery -A app.celery worker --loglevel=info
 
   youtube-session-generator:
     image: quay.io/invidious/youtube-trusted-session-generator
     container_name: youtube-trusted-session-generator
     ports:
       - "8080:8080"
+
+volumes:
+  postgres_data:
+  redis_data:
+  audio_data:

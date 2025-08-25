@@ -1,0 +1,12 @@
+frontend/package-lock.json
+data/
+backend/.env
+*.db
+*.log
+backend/__pycache__/
+backend/.pytest_cache/
+backend/storage/
+*.pyc
+.venv
+.claude
+.idea

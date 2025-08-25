@@ -1,0 +1,259 @@
+/* Custom styling for Swagger UI */
+
+/* Brand colors and theming */
+.swagger-ui .topbar {
+    background-color: #1a1a2e !important;
+    border-bottom: 2px solid #16213e !important;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label {
+    color: #ffffff !important;
+}
+
+.swagger-ui .topbar .download-url-wrapper input[type="text"] {
+    background-color: #0f3460 !important;
+    border: 1px solid #16213e !important;
+    color: #ffffff !important;
+}
+
+/* Header styling */
+.swagger-ui .info {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.swagger-ui .info .title {
+    color: white !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+}
+
+.swagger-ui .info .description {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Tag sections */
+.swagger-ui .opblock-tag {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    color: white !important;
+    border-radius: 6px !important;
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+}
+
+.swagger-ui .opblock-tag:hover {
+    background: linear-gradient(135deg, #e084fc 0%, #f0485c 100%) !important;
+}
+
+.swagger-ui .opblock-tag small {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.9rem !important;
+}
+
+/* Operation blocks */
+.swagger-ui .opblock {
+    border: 1px solid #e3e3e3 !important;
+    border-radius: 8px !important;
+    margin: 0.5rem 0 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.swagger-ui .opblock.opblock-post {
+    border-color: #49cc90 !important;
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+    background: #49cc90 !important;
+}
+
+.swagger-ui .opblock.opblock-get {
+    border-color: #61affe !important;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+    background: #61affe !important;
+}
+
+.swagger-ui .opblock.opblock-put {
+    border-color: #fca130 !important;
+}
+
+.swagger-ui .opblock.opblock-delete {
+    border-color: #f93e3e !important;
+}
+
+/* Method badges */
+.swagger-ui .opblock-summary-method {
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    padding: 6px 15px !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+}
+
+/* Response codes */
+.swagger-ui .responses-inner h4 {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #3b4151 !important;
+}
+
+.swagger-ui .response-col_status {
+    font-weight: 700 !important;
+}
+
+.swagger-ui .response-col_status.response-200 {
+    color: #49cc90 !important;
+}
+
+.swagger-ui .response-col_status.response-400,
+.swagger-ui .response-col_status.response-404,
+.swagger-ui .response-col_status.response-503 {
+    color: #f93e3e !important;
+}
+
+/* Parameters section */
+.swagger-ui .parameters-container {
+    background: #f8f9fa !important;
+    border-radius: 6px !important;
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
+}
+
+.swagger-ui .parameter__name {
+    font-weight: 600 !important;
+    color: #3b4151 !important;
+}
+
+.swagger-ui .parameter__type {
+    color: #3b4151 !important;
+    font-size: 0.9rem !important;
+}
+
+/* Model schemas */
+.swagger-ui .model-box {
+    border: 1px solid #e3e3e3 !important;
+    border-radius: 6px !important;
+    background: #fafbfc !important;
+}
+
+.swagger-ui .model-title {
+    color: #3b4151 !important;
+    font-weight: 600 !important;
+}
+
+/* Try it out button */
+.swagger-ui .btn.try-out__btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+}
+
+.swagger-ui .btn.try-out__btn:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+}
+
+/* Execute button */
+.swagger-ui .btn.execute {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+}
+
+.swagger-ui .btn.execute:hover {
+    background: linear-gradient(135deg, #0f8b81 0%, #32d96b 100%) !important;
+}
+
+/* Loading spinner */
+.swagger-ui .loading-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 6px !important;
+}
+
+/* Footer customization */
+.swagger-ui .info .contact {
+    margin-top: 1rem !important;
+}
+
+.swagger-ui .info .contact a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-decoration: underline !important;
+}
+
+/* Scrollbar customization */
+.swagger-ui ::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 4px !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 4px !important;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+}
+
+/* Custom badges for special endpoints */
+.swagger-ui .opblock-summary-description::after {
+    content: "";
+    display: inline-block;
+    margin-left: 8px;
+}
+
+/* Add AI/Intelligence badge */
+.swagger-ui .opblock[data-tag="intelligence"] .opblock-summary-description::after {
+    content: "🤖 AI";
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Add Real-time badge */
+.swagger-ui .opblock[data-tag="tasks"] .opblock-summary-description::after {
+    content: "⚡ Real-time";
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .swagger-ui .info .title {
+        font-size: 2rem !important;
+    }
+    
+    .swagger-ui .info {
+        padding: 1.5rem !important;
+    }
+    
+    .swagger-ui .opblock-tag {
+        padding: 0.8rem !important;
+        font-size: 1.1rem !important;
+    }
+}
